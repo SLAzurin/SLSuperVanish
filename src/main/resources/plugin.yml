@@ -19,7 +19,7 @@ softdepend:
 - NametagEdit
 - MVdWPlaceholderAPI
 - Vault
-- SLLoginAnnouner
+- SLLoginAnnouncer
 commands:
   sv:
     usage: /sv
