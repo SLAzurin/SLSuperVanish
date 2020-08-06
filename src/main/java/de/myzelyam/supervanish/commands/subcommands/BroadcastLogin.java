@@ -12,6 +12,7 @@ import de.myzelyam.supervanish.SuperVanish;
 import de.myzelyam.supervanish.commands.CommandAction;
 import de.myzelyam.supervanish.commands.SubCommand;
 import io.github.slazurin.slloginannouncer.SLLoginAnnouncer;
+import io.github.slazurin.slloginannouncer.utils.RainbowText;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -31,7 +32,7 @@ public class BroadcastLogin extends SubCommand {
             String loginMessage = "";
             boolean broadcastNotes = false;
             if (la != null) {
-                loginMessage = la.getApi().getRandomLoginMessage().replaceAll("<NAME>", p.getName());
+                loginMessage = new RainbowText(la.getApi().getRandomLoginMessage().replaceAll("<NAME>", p.getName())).getRainbowText();
             }
             
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {

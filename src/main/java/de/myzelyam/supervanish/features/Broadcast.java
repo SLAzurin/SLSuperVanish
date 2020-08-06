@@ -12,6 +12,7 @@ import de.myzelyam.api.vanish.PlayerShowEvent;
 import de.myzelyam.api.vanish.PostPlayerHideEvent;
 import de.myzelyam.supervanish.SuperVanish;
 import io.github.slazurin.slloginannouncer.SLLoginAnnouncer;
+import io.github.slazurin.slloginannouncer.utils.RainbowText;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -101,7 +102,7 @@ public class Broadcast extends Feature {
             String loginMessage = "";
             boolean broadcastNotes = false;
             if (la != null) {
-                loginMessage = la.getApi().getRandomLoginMessage().replaceAll("<NAME>", p.getName());
+                loginMessage = new RainbowText(la.getApi().getRandomLoginMessage().replaceAll("<NAME>", p.getName())).getRainbowText();
             }
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 if (!plugin.canSee(onlinePlayer, p)) {
