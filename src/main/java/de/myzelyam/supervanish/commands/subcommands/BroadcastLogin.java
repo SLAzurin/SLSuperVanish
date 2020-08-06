@@ -11,6 +11,7 @@ package de.myzelyam.supervanish.commands.subcommands;
 import de.myzelyam.supervanish.SuperVanish;
 import de.myzelyam.supervanish.commands.CommandAction;
 import de.myzelyam.supervanish.commands.SubCommand;
+import io.github.slazurin.slloginannouncer.SLLoginAnnouncer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -26,8 +27,25 @@ public class BroadcastLogin extends SubCommand {
     @Override
     public void execute(Command cmd, CommandSender p, String[] args, String label) {
         if (canDo(p, CommandAction.BROADCAST_LOGIN, true)) {
-            for (Player onlinePlayer : Bukkit.getOnlinePlayers())
-                plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
+            SLLoginAnnouncer la = (SLLoginAnnouncer) this.plugin.getServer().getPluginManager().getPlugin("SLLoginAnnouncer");
+            String loginMessage = "";
+            boolean broadcastNotes = false;
+            if (la != null) {
+                loginMessage = la.getApi().getRandomLoginMessage().replaceAll("<NAME>", p.getName());
+            }
+            
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+//                plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
+                if (la != null) {
+                    onlinePlayer.sendMessage(loginMessage);
+                    broadcastNotes = true;
+                } else {
+                    plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
+                }
+            }
+            if (broadcastNotes && la != null) {
+                la.getApi().broadcastLoginNotes();
+            }
         }
     }
 }

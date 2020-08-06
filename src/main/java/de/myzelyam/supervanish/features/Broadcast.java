@@ -11,6 +11,7 @@ package de.myzelyam.supervanish.features;
 import de.myzelyam.api.vanish.PlayerShowEvent;
 import de.myzelyam.api.vanish.PostPlayerHideEvent;
 import de.myzelyam.supervanish.SuperVanish;
+import io.github.slazurin.slloginannouncer.SLLoginAnnouncer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -96,21 +97,44 @@ public class Broadcast extends Feature {
         Player p = e.getPlayer();
         if (plugin.getSettings().getBoolean(
                 "MessageOptions.FakeJoinQuitMessages.BroadcastFakeJoinOnReappear") && !e.isSilent()) {
+            SLLoginAnnouncer la = (SLLoginAnnouncer) this.plugin.getServer().getPluginManager().getPlugin("SLLoginAnnouncer");
+            String loginMessage = "";
+            boolean broadcastNotes = false;
+            if (la != null) {
+                loginMessage = la.getApi().getRandomLoginMessage().replaceAll("<NAME>", p.getName());
+            }
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 if (!plugin.canSee(onlinePlayer, p)) {
                     if (!plugin.getSettings().getBoolean(
-                            "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins"))
-                        plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
+                            "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins")) {
+//                        plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
+                        if (la != null) {
+                            onlinePlayer.sendMessage(loginMessage);
+                            broadcastNotes = true;
+                        } else {
+                            plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
+                        }
+                    }
                 } else if (!plugin.getSettings().getBoolean(
                         "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToUsers"))
                     if (!plugin.getSettings().getBoolean(
                             "MessageOptions.FakeJoinQuitMessages.AnnounceVanishReappearToAdmins"))
                         plugin.sendMessage(onlinePlayer, "ReappearMessageWithPermission", p, onlinePlayer);
                     else if (onlinePlayer == p && !plugin.getSettings().getBoolean(
-                            "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins"))
-                        plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
-                    else if (onlinePlayer != p)
+                            "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins")) {
+//                        plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
+                        if (la != null) {
+                            onlinePlayer.sendMessage(loginMessage);
+                            broadcastNotes = true;
+                        } else {
+                            plugin.sendMessage(onlinePlayer, "ReappearMessage", p, onlinePlayer);
+                        }
+                    
+                    } else if (onlinePlayer != p)
                         plugin.sendMessage(onlinePlayer, "ReappearMessageWithPermission", p, onlinePlayer);
+            }
+            if (broadcastNotes && la != null) {
+                la.getApi().broadcastLoginNotes();
             }
         }
     }
