@@ -74,21 +74,47 @@ public class Broadcast extends Feature {
         final Player p = e.getPlayer();
         if (plugin.getSettings().getBoolean("MessageOptions.FakeJoinQuitMessages.BroadcastFakeQuitOnVanish")
                 && !e.isSilent()) {
+            SLLoginAnnouncer la = (SLLoginAnnouncer) this.plugin.getServer().getPluginManager().getPlugin("SLLoginAnnouncer");
+            boolean broadcastNotes = false;
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 if (!plugin.canSee(onlinePlayer, p)) {
                     if (!plugin.getSettings().getBoolean(
-                            "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins"))
-                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                            "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins")) {
+//                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                        if (la != null) {
+                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(onlinePlayer));
+                            broadcastNotes = true;
+                        } else {
+                            plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                        }
+                    }
                 } else if (!plugin.getSettings().getBoolean(
                         "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToUsers"))
                     if (!plugin.getSettings().getBoolean(
-                            "MessageOptions.FakeJoinQuitMessages.AnnounceVanishReappearToAdmins"))
-                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                            "MessageOptions.FakeJoinQuitMessages.AnnounceVanishReappearToAdmins")) {
+//                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                        if (la != null) {
+                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(onlinePlayer));
+                            broadcastNotes = true;
+                        } else {
+                            plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                        }
+                    }
                     else if (onlinePlayer == p && !plugin.getSettings().getBoolean(
-                            "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins"))
-                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                            "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins")) {
+//                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                        if (la != null) {
+                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(onlinePlayer));
+                            broadcastNotes = true;
+                        } else {
+                            plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
+                        }
+                    }
                     else if (onlinePlayer != p)
                         plugin.sendMessage(onlinePlayer, "VanishMessageWithPermission", p, onlinePlayer);
+            }
+            if (broadcastNotes && la != null) {
+                la.getApi().broadcastLogoutNotes();
             }
         }
     }
