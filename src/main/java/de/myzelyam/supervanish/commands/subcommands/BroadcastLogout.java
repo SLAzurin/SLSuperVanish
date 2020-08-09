@@ -32,7 +32,7 @@ public class BroadcastLogout extends SubCommand {
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 //                plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
                 if (la != null) {
-                    onlinePlayer.sendMessage(la.getApi().getLogoutMessage(onlinePlayer));
+                    onlinePlayer.sendMessage(la.getApi().getLogoutMessage((Player)p));
                     broadcastNotes = true;
                 } else {
                     plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);

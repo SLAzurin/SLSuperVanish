@@ -82,7 +82,7 @@ public class Broadcast extends Feature {
                             "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins")) {
 //                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
                         if (la != null) {
-                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(onlinePlayer));
+                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(p));
                             broadcastNotes = true;
                         } else {
                             plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
@@ -94,7 +94,7 @@ public class Broadcast extends Feature {
                             "MessageOptions.FakeJoinQuitMessages.AnnounceVanishReappearToAdmins")) {
 //                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
                         if (la != null) {
-                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(onlinePlayer));
+                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(p));
                             broadcastNotes = true;
                         } else {
                             plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
@@ -104,7 +104,7 @@ public class Broadcast extends Feature {
                             "MessageOptions.FakeJoinQuitMessages.SendMessageOnlyToAdmins")) {
 //                        plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
                         if (la != null) {
-                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(onlinePlayer));
+                            onlinePlayer.sendMessage(la.getApi().getLogoutMessage(p));
                             broadcastNotes = true;
                         } else {
                             plugin.sendMessage(onlinePlayer, "VanishMessage", p, onlinePlayer);
