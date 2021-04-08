@@ -9,18 +9,7 @@
 package de.myzelyam.supervanish.commands;
 
 import de.myzelyam.supervanish.SuperVanish;
-import de.myzelyam.supervanish.commands.subcommands.BroadcastLogin;
-import de.myzelyam.supervanish.commands.subcommands.BroadcastLogout;
-import de.myzelyam.supervanish.commands.subcommands.InvalidUsage;
-import de.myzelyam.supervanish.commands.subcommands.PrintStacktrace;
-import de.myzelyam.supervanish.commands.subcommands.RecreateFiles;
-import de.myzelyam.supervanish.commands.subcommands.Reload;
-import de.myzelyam.supervanish.commands.subcommands.ShowHelp;
-import de.myzelyam.supervanish.commands.subcommands.ToggleItemPickups;
-import de.myzelyam.supervanish.commands.subcommands.VanishOther;
-import de.myzelyam.supervanish.commands.subcommands.VanishSelf;
-import de.myzelyam.supervanish.commands.subcommands.VanishedList;
-
+import de.myzelyam.supervanish.commands.subcommands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -43,13 +32,33 @@ public class SubCommandMgr {
         try {
             // invalid usage by default
             Executable executable = new InvalidUsage(plugin);
-            // vanish self
+            // vanish self #1
             if (args.length == 0) {
                 if (sender instanceof Player)
                     executable = new VanishSelf(plugin);
                 executable.execute(cmd, sender, args, label);
                 return;
             }
+            // vanish other
+            if ((args[0].equalsIgnoreCase("on")
+                    || args[0].equalsIgnoreCase("off")
+                    || args[0].equalsIgnoreCase("vanish")
+                    || args[0].equalsIgnoreCase("reappear")
+                    || args[0].equalsIgnoreCase("enable")
+                    || args[0].equalsIgnoreCase("disable"))
+                    && args.length > 1
+                    || Bukkit.getPlayer(args[0]) != null) {
+                executable = Bukkit.getPlayer(args[0]) != null
+                        && !(args[0].equalsIgnoreCase("on")
+                        || args[0].equalsIgnoreCase("off")
+                        || args[0].equalsIgnoreCase("vanish")
+                        || args[0].equalsIgnoreCase("reappear")
+                        || args[0].equalsIgnoreCase("enable")
+                        || args[0].equalsIgnoreCase("disable"))
+                        ? new VanishOther(Bukkit.getPlayer(args[0]), plugin)
+                        : new VanishOther(plugin);
+            }
+            // vanish self #2
             if ((args[0].equalsIgnoreCase("on")
                     || args[0].equalsIgnoreCase("off")
                     || args[0].equalsIgnoreCase("vanish")
@@ -116,25 +125,6 @@ public class SubCommandMgr {
             if (args[0].equalsIgnoreCase("logout")) {
                 executable = new BroadcastLogout(plugin);
             }
-            // vanish other
-            if ((args[0].equalsIgnoreCase("on")
-                    || args[0].equalsIgnoreCase("off")
-                    || args[0].equalsIgnoreCase("vanish")
-                    || args[0].equalsIgnoreCase("reappear")
-                    || args[0].equalsIgnoreCase("enable")
-                    || args[0].equalsIgnoreCase("disable"))
-                    && args.length > 1
-                    || Bukkit.getPlayer(args[0]) != null) {
-                executable = Bukkit.getPlayer(args[0]) != null
-                        && !(args[0].equalsIgnoreCase("on")
-                        || args[0].equalsIgnoreCase("off")
-                        || args[0].equalsIgnoreCase("vanish")
-                        || args[0].equalsIgnoreCase("reappear")
-                        || args[0].equalsIgnoreCase("enable")
-                        || args[0].equalsIgnoreCase("disable"))
-                        ? new VanishOther(Bukkit.getPlayer(args[0]), plugin)
-                        : new VanishOther(plugin);
-            }
             executable.execute(cmd, sender, args, label);
         } catch (Exception e) {
             plugin.logException(e);
@@ -145,6 +135,9 @@ public class SubCommandMgr {
                                       String alias, String[] args) {
         // don't provide any help at all if user doesn't have permission to
         // execute '/sv help'
+        if (!CommandAction.hasAnyCmdPermission(sender, plugin)) {
+            return Collections.emptyList();
+        }
         if (args.length == 1) {
             String toComplete = args[0];
             // didn't start to type first argument
