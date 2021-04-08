@@ -38,11 +38,11 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <repository>
+        <!-- <repository>
             <id>mvdw-software-repo</id>
             <name>MVdW Public Repositories</name>
             <url>http://repo.mvdw-software.be/content/groups/public/</url>
-        </repository>
+        </repository> -->
         <repository>
             <id>essentials-repo</id>
             <url>https://ci.ender.zone/plugin/repository/everything/</url>
@@ -134,13 +134,15 @@
         <dependency>
             <groupId>be.maximvdw</groupId>
             <artifactId>MVdWPlaceholderAPI</artifactId>
+            <scope>system</scope>
+            <systemPath>${basedir}/dependencies/MVdWPlaceholderAPI-2.5.1-SNAPSHOT.jar</systemPath>
             <version>2.5.1-SNAPSHOT</version>
-            <exclusions>
+            <!-- <exclusions>
                 <exclusion>
                     <groupId>org.spigotmc</groupId>
                     <artifactId>spigot</artifactId>
                 </exclusion>
-            </exclusions>
+            </exclusions> -->
         </dependency>
         <!--PlaceholderAPI-->
         <dependency>
